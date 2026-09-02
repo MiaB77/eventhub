@@ -59,7 +59,15 @@ async function clearBookings(page) {
   if (alreadyEmpty) return;
 
   page.once('dialog', (dialog) => dialog.accept());
+
+  // Await the clear-all DELETE round-trip before asserting the UI, so the empty
+  // state isn't racing the live API against the 5s expect timeout.
+  const clearAllDone = page.waitForResponse(
+    (res) => res.url().endsWith('/api/bookings') && res.request().method() === 'DELETE',
+  );
   await page.getByRole('button', { name: /clear all bookings/i }).click();
+  await clearAllDone;
+
   await expect(page.getByText('No bookings yet')).toBeVisible();
 }
 
