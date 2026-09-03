@@ -29,3 +29,10 @@ Thumbs.db
 # Playwright test artifacts
 playwright-report/
 test-results/
+.playwright-mcp/
+
+# Local Claude Code settings (machine-specific)
+.claude/settings.local.json
+
+# TypeScript incremental build cache
+*.tsbuildinfo
